@@ -1,17 +1,26 @@
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('mobx'), require('query-string'), require('director/build/director'), require('react'), require('mobx-react')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'mobx', 'query-string', 'director/build/director', 'react', 'mobx-react'], factory) :
-  (factory((global.mobxRouter = global.mobxRouter || {}),global.mobx,global.queryString,global.director_build_director,global.React,global.mobxReact));
-}(this, (function (exports,mobx,queryString,director_build_director,React,mobxReact) { 'use strict';
+'use strict';
 
-queryString = 'default' in queryString ? queryString['default'] : queryString;
-React = 'default' in React ? React['default'] : React;
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var mobx = require('mobx');
+var queryString = _interopDefault(require('query-string'));
+var director_build_director = require('director/build/director');
+var React = _interopDefault(require('react'));
+var mobxReact = require('mobx-react');
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
+
+
+
+
+
+
 
 
 
@@ -240,7 +249,7 @@ var Route = function () {
      Example: if url is /book/:id/page/:pageId and object is {id:100, pageId:200} it will return /book/100/page/200
      */
     value: function replaceUrlParams(params) {
-      var queryParams = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var queryParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       params = mobx.toJS(params);
       queryParams = mobx.toJS(queryParams);
@@ -250,11 +259,10 @@ var Route = function () {
       var newPath = this.originalPath;
 
       getRegexMatches(this.originalPath, paramRegex, function (_ref) {
-        var _ref2 = slicedToArray(_ref, 3);
-
-        var fullMatch = _ref2[0];
-        var paramKey = _ref2[1];
-        var paramKeyWithoutColon = _ref2[2];
+        var _ref2 = slicedToArray(_ref, 3),
+            fullMatch = _ref2[0],
+            paramKey = _ref2[1],
+            paramKeyWithoutColon = _ref2[2];
 
         var value = params[paramKeyWithoutColon];
         newPath = value ? newPath.replace(paramKey, value) : newPath.replace('/' + paramKey, '');
@@ -274,11 +282,10 @@ var Route = function () {
 
       var params = [];
       getRegexMatches(this.originalPath, paramRegex, function (_ref3) {
-        var _ref4 = slicedToArray(_ref3, 3);
-
-        var fullMatch = _ref4[0];
-        var paramKey = _ref4[1];
-        var paramKeyWithoutColon = _ref4[2];
+        var _ref4 = slicedToArray(_ref3, 3),
+            fullMatch = _ref4[0],
+            paramKey = _ref4[1],
+            paramKeyWithoutColon = _ref4[2];
 
         params.push(paramKeyWithoutColon);
       });
@@ -305,6 +312,7 @@ var _class;
 var _descriptor;
 var _descriptor2;
 var _descriptor3;
+var _descriptor4;
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -355,46 +363,10 @@ var RouterStore = (_class = function () {
 
     _initDefineProp(this, 'currentView', _descriptor3, this);
 
-    this.goTo = this.goTo.bind(this);
+    _initDefineProp(this, 'goTo', _descriptor4, this);
   }
 
   createClass(RouterStore, [{
-    key: 'goTo',
-    value: function goTo(view, paramsObj, store, queryParamsObj) {
-
-      var nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
-      var pathChanged = nextPath !== this.currentPath;
-
-      if (!pathChanged) {
-        return;
-      }
-
-      var rootViewChanged = !this.currentView || this.currentView.rootPath !== view.rootPath;
-      var currentParams = mobx.toJS(this.params);
-      var currentQueryParams = mobx.toJS(this.queryParams);
-
-      var beforeExitResult = rootViewChanged && this.currentView && this.currentView.beforeExit ? this.currentView.beforeExit(this.currentView, currentParams, store, currentQueryParams) : true;
-      if (beforeExitResult === false) {
-        return;
-      }
-
-      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, currentParams, store, currentQueryParams) : true;
-      if (beforeEnterResult === false) {
-        return;
-      }
-
-      rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store, currentQueryParams);
-
-      this.currentView = view;
-      this.params = mobx.toJS(paramsObj);
-      this.queryParams = mobx.toJS(queryParamsObj);
-      var nextParams = mobx.toJS(paramsObj);
-      var nextQueryParams = mobx.toJS(queryParamsObj);
-
-      rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
-      !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
-    }
-  }, {
     key: 'currentPath',
     get: function get() {
       return this.currentView ? this.currentView.replaceUrlParams(this.params, this.queryParams) : '';
@@ -414,7 +386,47 @@ var RouterStore = (_class = function () {
 }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'currentView', [mobx.observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'goTo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
+}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'goTo', [mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this = this;
+
+    return function (view, paramsObj, store, queryParamsObj) {
+
+      var nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
+      var pathChanged = nextPath !== _this.currentPath;
+
+      if (!pathChanged) {
+        return;
+      }
+
+      var rootViewChanged = !_this.currentView || _this.currentView.rootPath !== view.rootPath;
+      var currentParams = mobx.toJS(_this.params);
+      var currentQueryParams = mobx.toJS(_this.queryParams);
+
+      var beforeExitResult = rootViewChanged && _this.currentView && _this.currentView.beforeExit ? _this.currentView.beforeExit(_this.currentView, currentParams, store, currentQueryParams) : true;
+      if (beforeExitResult === false) {
+        return;
+      }
+
+      var beforeEnterResult = rootViewChanged && view.beforeEnter ? view.beforeEnter(view, currentParams, store, currentQueryParams) : true;
+      if (beforeEnterResult === false) {
+        return;
+      }
+
+      rootViewChanged && _this.currentView && _this.currentView.onExit && _this.currentView.onExit(_this.currentView, currentParams, store, currentQueryParams);
+
+      _this.currentView = view;
+      _this.params = mobx.toJS(paramsObj);
+      _this.queryParams = mobx.toJS(queryParamsObj);
+      var nextParams = mobx.toJS(paramsObj);
+      var nextQueryParams = mobx.toJS(queryParamsObj);
+
+      rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
+      !rootViewChanged && _this.currentView && _this.currentView.onParamsChange && _this.currentView.onParamsChange(_this.currentView, nextParams, store, nextQueryParams);
+    };
+  }
+}), _applyDecoratedDescriptor(_class.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'currentPath'), _class.prototype)), _class);
 
 var createDirectorRouter = function createDirectorRouter(views, store) {
   new director_build_director.Router(_extends({}, viewsForDirector(views, store))).configure({
@@ -444,26 +456,26 @@ var MobxRouter = function MobxRouter(_ref) {
     router.currentView && router.currentView.component
   );
 };
-var MobxRouter$1 = mobxReact.observer(['store'], MobxRouter);
+var MobxRouter$1 = mobxReact.inject('store', mobxReact.observer(MobxRouter));
 
 var Link = function Link(_ref) {
-  var view = _ref.view;
-  var className = _ref.className;
-  var _ref$params = _ref.params;
-  var params = _ref$params === undefined ? {} : _ref$params;
-  var _ref$queryParams = _ref.queryParams;
-  var queryParams = _ref$queryParams === undefined ? {} : _ref$queryParams;
-  var _ref$store = _ref.store;
-  var store = _ref$store === undefined ? {} : _ref$store;
-  var _ref$refresh = _ref.refresh;
-  var refresh = _ref$refresh === undefined ? false : _ref$refresh;
-  var _ref$style = _ref.style;
-  var style = _ref$style === undefined ? {} : _ref$style;
-  var children = _ref.children;
-  var _ref$title = _ref.title;
-  var title = _ref$title === undefined ? children : _ref$title;
-  var _ref$router = _ref.router;
-  var router = _ref$router === undefined ? store.router : _ref$router;
+  var view = _ref.view,
+      className = _ref.className,
+      _ref$params = _ref.params,
+      params = _ref$params === undefined ? {} : _ref$params,
+      _ref$queryParams = _ref.queryParams,
+      queryParams = _ref$queryParams === undefined ? {} : _ref$queryParams,
+      _ref$store = _ref.store,
+      store = _ref$store === undefined ? {} : _ref$store,
+      _ref$refresh = _ref.refresh,
+      refresh = _ref$refresh === undefined ? false : _ref$refresh,
+      _ref$style = _ref.style,
+      style = _ref$style === undefined ? {} : _ref$style,
+      children = _ref.children,
+      _ref$title = _ref.title,
+      title = _ref$title === undefined ? children : _ref$title,
+      _ref$router = _ref.router,
+      router = _ref$router === undefined ? store.router : _ref$router;
 
   if (!router) {
     return console.error('The router prop must be defined for a Link component to work!');
@@ -498,7 +510,3 @@ exports.MobxRouter = MobxRouter$1;
 exports.Link = Link$1;
 exports.RouterStore = RouterStore;
 exports.startRouter = startRouter;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
