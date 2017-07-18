@@ -1103,10 +1103,6 @@ diff@^3.0.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.3.0.tgz#056695150d7aa93237ca7e378ac3b1682b7963b9"
 
-director@1.2.8:
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/director/-/director-1.2.8.tgz#c6d9b4dd890e9aff5365183fe9cc8e73994cf2d5"
-
 ecc-jsbn@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
@@ -1118,6 +1114,10 @@ encoding@^0.1.11:
   resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
   dependencies:
     iconv-lite "~0.4.13"
+
+ep-tarantino@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/ep-tarantino/-/ep-tarantino-2.1.0.tgz#b42592baa0c24a27a9d92647c191216c128410c1"
 
 errno@^0.1.4:
   version "0.1.4"

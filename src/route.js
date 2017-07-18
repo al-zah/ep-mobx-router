@@ -1,4 +1,4 @@
-import {toJS} from 'mobx';
+import {toJS, observable, action} from 'mobx';
 import {getObjectKeys} from './utils';
 import {paramRegex, optionalRegex} from './regex';
 import {getRegexMatches} from './utils';
@@ -10,6 +10,7 @@ class Route {
   component;
   path;
   rootPath;
+  @observable match = false;
 
   //lifecycle methods
   onEnter;
@@ -22,7 +23,7 @@ class Route {
     this.originalPath = this.path;
 
     //if there are optional parameters, replace the path with a regex expression
-    this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/]*)?$");
+    this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/\!]*)");
     this.rootPath = this.getRootPath();
 
     //bind
@@ -64,19 +65,23 @@ class Route {
    converts an array of params [123, 100] to an object
    Example: if the current this.path is /book/:id/page/:pageId it will return {id:123, pageId:100}
    */
-  getParamsObject(paramsArray) {
-
+  getParamsObject = (paramsArray) => {
     const params = [];
-    getRegexMatches(this.originalPath, paramRegex, ([fullMatch, paramKey, paramKeyWithoutColon]) => {
+
+    getRegexMatches(this.originalPath, paramRegex, ([paramKeyWithoutColon]) => {
       params.push(paramKeyWithoutColon);
     });
 
-    const result = paramsArray.reduce((obj, paramValue, index) => {
-      obj[params[index]] = paramValue;
+    return paramsArray.reduce((obj, paramValue, index) => {
+      if (!params[index]) return obj;
+      obj[params[index].replace(/(\/:|\?)/g, '')] = paramValue;
+
       return obj;
     }, {});
+  };
 
-    return result;
+  @action setMatch = (value) => {
+    this.match = value;
   }
 
   goTo(store, paramsArr) {

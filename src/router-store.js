@@ -1,13 +1,11 @@
 import {observable, computed, action, toJS} from 'mobx';
 
 class RouterStore {
-
-  @observable params = {};
-  @observable queryParams = {};
+  @observable.struct params = {};
+  @observable.struct queryParams = {};
   @observable currentView;
 
   @action goTo = (view, paramsObj, store, queryParamsObj) => {
-
     const nextPath = view.replaceUrlParams(paramsObj, queryParamsObj);
     const pathChanged = nextPath !== this.currentPath;
 
