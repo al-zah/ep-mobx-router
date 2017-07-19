@@ -523,7 +523,7 @@ var RouterStore = (_dec = mobx.observable.struct, _dec2 = mobx.observable.struct
       rootViewChanged && _this.currentView && _this.currentView.onExit && _this.currentView.onExit(_this.currentView, currentParams, store, currentQueryParams);
 
       _this.currentView = view;
-      _this.params = mobx.toJS(paramsObj);
+      _this.params = _extends({}, _this.params, mobx.toJS(paramsObj));
       _this.queryParams = mobx.toJS(queryParamsObj);
       var nextParams = mobx.toJS(paramsObj);
       var nextQueryParams = mobx.toJS(queryParamsObj);

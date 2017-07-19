@@ -26,7 +26,7 @@ test('viewsForDirector', () => {
 
   expect(keys).toEqual(['/', '/profile/:username/:tab', '/gallery']);
   values.forEach(value => {
-    expect(typeof value).toEqual('function');
+    expect(typeof value).toEqual('object');
   });
 
 });

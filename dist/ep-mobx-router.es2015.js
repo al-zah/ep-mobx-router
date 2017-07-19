@@ -519,7 +519,7 @@ var RouterStore = (_dec = observable.struct, _dec2 = observable.struct, (_class$
       rootViewChanged && _this.currentView && _this.currentView.onExit && _this.currentView.onExit(_this.currentView, currentParams, store, currentQueryParams);
 
       _this.currentView = view;
-      _this.params = toJS(paramsObj);
+      _this.params = _extends({}, _this.params, toJS(paramsObj));
       _this.queryParams = toJS(queryParamsObj);
       var nextParams = toJS(paramsObj);
       var nextQueryParams = toJS(queryParamsObj);

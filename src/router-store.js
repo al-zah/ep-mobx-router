@@ -30,7 +30,7 @@ class RouterStore {
     rootViewChanged && this.currentView && this.currentView.onExit && this.currentView.onExit(this.currentView, currentParams, store, currentQueryParams);
 
     this.currentView = view;
-    this.params = toJS(paramsObj);
+    this.params = { ...this.params, ...toJS(paramsObj) };
     this.queryParams = toJS(queryParamsObj);
     const nextParams = toJS(paramsObj);
     const nextQueryParams = toJS(queryParamsObj);
