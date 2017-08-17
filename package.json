@@ -4,6 +4,7 @@
   "description": "A simple router for MobX",
   "main": "dist/ep-mobx-router.js",
   "jsnext:main": "dist/ep-mobx-router.es2015.js",
+  "typings": "index",
   "scripts": {
     "test": "jest",
     "build": "./node_modules/rollup-babel-lib-bundler/bin/index.js index.js"
