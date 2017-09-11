@@ -21,6 +21,6 @@ export const Route: {
     childRoutes?: { [key: string]: any };
 };
 type routerMap = { [key: string]: typeof Route };
-export const Link: React.ComponentClass<{ params: IRouteParams; view: any; store: any; className?: string; key?: string }>;
+export const Link: React.ComponentClass<{ params?: IRouteParams; view: any; store: any; className?: string; styleName?: string; key?: string }>;
 export const MobxRouter: React.ComponentClass<{routes: {[key: string]: typeof Route}}>;
 export function startRouter(views: {[key: string]: typeof Route}, store: any): void;
