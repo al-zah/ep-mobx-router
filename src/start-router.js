@@ -7,6 +7,7 @@ const createDirectorRouter = (views, store) => new tarantino.Router({
 }).configure({
   html5history: true,
   recurse: 'forward',
+  strict: false,
 }).init();
 
 const startRouter = (views, store) => {
