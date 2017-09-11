@@ -533,7 +533,8 @@ var RouterStore = (_dec = observable.struct, _dec2 = observable.struct, (_class$
 var createDirectorRouter = function createDirectorRouter(views, store) {
   return new tarantino.Router(_extends({}, viewsForDirector(views, store))).configure({
     html5history: true,
-    recurse: 'forward'
+    recurse: 'forward',
+    strict: false
   }).init();
 };
 
