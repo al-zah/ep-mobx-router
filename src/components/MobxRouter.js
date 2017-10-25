@@ -5,18 +5,19 @@ import { observer } from 'mobx-react';
 @observer
 class MobxRouter extends Component {
   getCurrentViewTree(list) {
-    return Object.keys(list).map((key) => {
+    return Object.keys(list).reduce((acc, key) => {
       const route = list[key];
 
-      if (!route || !route.match) return null;
+      if (!route || !route.match || acc.length >= 1) return acc;
+
       const Component = list[key].component;
 
       if (list[key].childRoutes) {
-        return <Component key={key}>{this.getCurrentViewTree(list[key].childRoutes)}</Component>;
+        return [...acc, <Component key={key}>{this.getCurrentViewTree(list[key].childRoutes)}</Component>];
       }
 
-      return typeof list[key].component === 'function' ? <Component key={key} /> : Component;
-    });
+      return typeof list[key].component === 'function' ? [...acc, <Component key={key} />] : [...acc, Component];
+    }, []);
   }
 
   render() {

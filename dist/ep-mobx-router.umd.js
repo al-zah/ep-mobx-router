@@ -189,6 +189,28 @@ var slicedToArray = function () {
   };
 }();
 
+
+
+
+
+
+
+
+
+
+
+
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
 var isObject = function isObject(obj) {
   return obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && !Array.isArray(obj);
 };
@@ -231,8 +253,8 @@ var viewsForDirector = function viewsForDirector(views, store, parentView) {
     }
 
     if (parentView) {
-      view.path = parentView.path + view.path;
-      view.originalPath = parentView.originalPath + view.originalPath;
+      view.path = ('' + parentView.path + view.path).replace('\/\/', '\/');
+      view.originalPath = ('' + parentView.originalPath + view.originalPath).replace('\/\/', '\/');
     }
 
     return obj;
@@ -567,28 +589,31 @@ var MobxRouter = mobxReact.observer(_class$2 = function (_Component) {
     value: function getCurrentViewTree(list) {
       var _this2 = this;
 
-      return Object.keys(list).map(function (key) {
+      return Object.keys(list).reduce(function (acc, key) {
         var route = list[key];
 
-        if (!route || !route.match) return null;
+        if (!route || !route.match || acc.length >= 1) return acc;
+
         var Component$$1 = list[key].component;
 
         if (list[key].childRoutes) {
-          return React__default.createElement(
+          return [].concat(toConsumableArray(acc), [React__default.createElement(
             Component$$1,
             { key: key },
             _this2.getCurrentViewTree(list[key].childRoutes)
-          );
+          )]);
         }
 
-        return typeof list[key].component === 'function' ? React__default.createElement(Component$$1, { key: key }) : Component$$1;
-      });
+        return typeof list[key].component === 'function' ? [].concat(toConsumableArray(acc), [React__default.createElement(Component$$1, { key: key })]) : [].concat(toConsumableArray(acc), [Component$$1]);
+      }, []);
     }
   }, {
     key: 'render',
     value: function render() {
       var routes = this.props.routes;
 
+
+      console.log(this.getCurrentViewTree(routes));
 
       return React__default.createElement(
         'div',

@@ -24,8 +24,8 @@ export const viewsForDirector = (views, store, parentView) => getObjectKeys(view
   }
 
   if (parentView) {
-    view.path = parentView.path + view.path;
-    view.originalPath = parentView.originalPath + view.originalPath;
+    view.path = `${parentView.path}${view.path}`.replace('\/\/', '\/');
+    view.originalPath = `${parentView.originalPath}${view.originalPath}`.replace('\/\/', '\/');
   }
 
   return obj;
