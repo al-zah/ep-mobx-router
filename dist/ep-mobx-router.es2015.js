@@ -609,8 +609,6 @@ var MobxRouter = observer(_class$2 = function (_Component) {
       var routes = this.props.routes;
 
 
-      console.log(this.getCurrentViewTree(routes));
-
       return React.createElement(
         'div',
         null,
