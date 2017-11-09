@@ -1,6 +1,6 @@
 {
   "name": "ep-mobx-router",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "A simple router for MobX",
   "main": "dist/ep-mobx-router.js",
   "jsnext:main": "dist/ep-mobx-router.es2015.js",

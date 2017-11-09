@@ -528,7 +528,7 @@ var RouterStore = (_dec = mobx.observable.struct, _dec2 = mobx.observable.struct
         return;
       }
 
-      var rootViewChanged = !_this.currentView || _this.currentView.rootPath !== view.rootPath;
+      var rootViewChanged = !_this.currentView || _this.currentView.getRootPath() !== view.getRootPath();
       var currentParams = mobx.toJS(_this.params);
       var currentQueryParams = mobx.toJS(_this.queryParams);
 
@@ -550,8 +550,8 @@ var RouterStore = (_dec = mobx.observable.struct, _dec2 = mobx.observable.struct
       var nextParams = mobx.toJS(paramsObj);
       var nextQueryParams = mobx.toJS(queryParamsObj);
 
-      rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
-      !rootViewChanged && _this.currentView && _this.currentView.onParamsChange && _this.currentView.onParamsChange(_this.currentView, nextParams, store, nextQueryParams);
+      rootViewChanged && view.onEnter && view.match && view.onEnter(view, nextParams, store, nextQueryParams);
+      !rootViewChanged && _this.currentView && view.match && _this.currentView.onParamsChange && _this.currentView.onParamsChange(_this.currentView, nextParams, store, nextQueryParams);
     };
   }
 }), _applyDecoratedDescriptor$1(_class$1.prototype, 'currentPath', [mobx.computed], Object.getOwnPropertyDescriptor(_class$1.prototype, 'currentPath'), _class$1.prototype)), _class$1));

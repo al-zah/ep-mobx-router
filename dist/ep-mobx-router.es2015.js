@@ -524,7 +524,7 @@ var RouterStore = (_dec = observable.struct, _dec2 = observable.struct, (_class$
         return;
       }
 
-      var rootViewChanged = !_this.currentView || _this.currentView.rootPath !== view.rootPath;
+      var rootViewChanged = !_this.currentView || _this.currentView.getRootPath() !== view.getRootPath();
       var currentParams = toJS(_this.params);
       var currentQueryParams = toJS(_this.queryParams);
 
@@ -546,8 +546,8 @@ var RouterStore = (_dec = observable.struct, _dec2 = observable.struct, (_class$
       var nextParams = toJS(paramsObj);
       var nextQueryParams = toJS(queryParamsObj);
 
-      rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
-      !rootViewChanged && _this.currentView && _this.currentView.onParamsChange && _this.currentView.onParamsChange(_this.currentView, nextParams, store, nextQueryParams);
+      rootViewChanged && view.onEnter && view.match && view.onEnter(view, nextParams, store, nextQueryParams);
+      !rootViewChanged && _this.currentView && view.match && _this.currentView.onParamsChange && _this.currentView.onParamsChange(_this.currentView, nextParams, store, nextQueryParams);
     };
   }
 }), _applyDecoratedDescriptor$1(_class$1.prototype, 'currentPath', [computed], Object.getOwnPropertyDescriptor(_class$1.prototype, 'currentPath'), _class$1.prototype)), _class$1));

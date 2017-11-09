@@ -13,7 +13,7 @@ class RouterStore {
       return;
     }
 
-    const rootViewChanged = !this.currentView || (this.currentView.rootPath !== view.rootPath);
+    const rootViewChanged = !this.currentView || (this.currentView.getRootPath() !== view.getRootPath());
     const currentParams = toJS(this.params);
     const currentQueryParams = toJS(this.queryParams);
 
@@ -35,8 +35,8 @@ class RouterStore {
     const nextParams = toJS(paramsObj);
     const nextQueryParams = toJS(queryParamsObj);
 
-    rootViewChanged && view.onEnter && view.onEnter(view, nextParams, store, nextQueryParams);
-    !rootViewChanged && this.currentView && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
+    rootViewChanged && view.onEnter && view.match && view.onEnter(view, nextParams, store, nextQueryParams);
+    !rootViewChanged && this.currentView && view.match && this.currentView.onParamsChange && this.currentView.onParamsChange(this.currentView, nextParams, store, nextQueryParams);
   }
 
   @computed get currentPath() {
