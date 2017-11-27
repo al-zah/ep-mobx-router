@@ -19,7 +19,7 @@ const Link = ({view, className, params = {}, queryParams = {}, store = {}, refre
           router.goTo(view, params, store, queryParams);
         }
       }}
-      href={view.replaceUrlParams(params, queryParams)}>
+      href={view && view.replaceUrlParams(params, queryParams)}>
       {title}
     </a>
   )

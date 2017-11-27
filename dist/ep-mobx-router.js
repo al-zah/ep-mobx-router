@@ -664,7 +664,7 @@ var Link = function Link(_ref) {
           router.goTo(view, params, store, queryParams);
         }
       },
-      href: view.replaceUrlParams(params, queryParams) },
+      href: view && view.replaceUrlParams(params, queryParams) },
     title
   );
 };
