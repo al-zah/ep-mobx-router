@@ -248,6 +248,8 @@ var viewsForDirector = function viewsForDirector(views, store, parentView) {
       });
     }
 
+    view.ownPath = view.path;
+
     if (parentView) {
       view.path = ('' + parentView.path + view.path).replace('\/\/', '\/');
       view.originalPath = ('' + parentView.originalPath + view.originalPath).replace('\/\/', '\/');
@@ -264,8 +266,8 @@ var getRegexMatches = function getRegexMatches(string, regexExpression, callback
   }
 };
 
-var paramRegex = /\/(:([^\/?]*)\??)/g;
-var optionalRegex = /(\/:[^\/]*\?)/g;
+var paramRegex = /\/(:([^\/?]*)\$?)/g;
+var optionalRegex = /(\/:[^\/]*\$)/g;
 
 var _class;
 var _descriptor;
@@ -313,9 +315,6 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
 var Route = (_class = function () {
 
   //lifecycle methods
-
-
-  //props
   function Route(props) {
     var _this = this;
 
@@ -335,7 +334,7 @@ var Route = (_class = function () {
 
       return paramsArray.reduce(function (obj, paramValue, index) {
         if (!params[index]) return obj;
-        obj[params[index].replace(/(\/:|\?)/g, '')] = paramValue;
+        obj[params[index].replace(/(\/:|\&)/g, '')] = paramValue;
 
         return obj;
       }, {});
@@ -350,10 +349,8 @@ var Route = (_class = function () {
 
     //if there are optional parameters, replace the path with a regex expression
     this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/\!]*)");
-    this.rootPath = this.getRootPath();
 
     //bind
-    this.getRootPath = this.getRootPath.bind(this);
     this.replaceUrlParams = this.replaceUrlParams.bind(this);
     this.getParamsObject = this.getParamsObject.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -361,16 +358,14 @@ var Route = (_class = function () {
 
   /*
    Sets the root path for the current path, so it's easier to determine if the route entered/exited or just some params changed
-   Example: for '/' the root path is '/', for '/profile/:username/:tab' the root path is '/profile'
+   Example: for '/' the root path is '/', for '/profile/:username/:tab' the root path is '/profile/'
    */
 
 
+  //props
+
+
   createClass(Route, [{
-    key: 'getRootPath',
-    value: function getRootPath() {
-      return '/' + this.path.split('/')[1];
-    }
-  }, {
     key: 'replaceUrlParams',
 
 
@@ -413,6 +408,15 @@ var Route = (_class = function () {
       var queryParamsObject = queryString.parse(window.location.search);
       store.router.goTo(this, paramsObject, store, queryParamsObject);
     }
+  }, {
+    key: 'rootPath',
+    get: function get() {
+      if (this.ownPath.indexOf(':') !== -1) {
+        return this.ownPath.split(':')[0];
+      }
+
+      return this.ownPath;
+    }
   }]);
   return Route;
 }(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'match', [observable], {
@@ -420,7 +424,7 @@ var Route = (_class = function () {
   initializer: function initializer() {
     return false;
   }
-}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'setMatch', [action], {
+}), _applyDecoratedDescriptor(_class.prototype, 'rootPath', [computed], Object.getOwnPropertyDescriptor(_class.prototype, 'rootPath'), _class.prototype), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'setMatch', [action], {
   enumerable: true,
   initializer: function initializer() {
     var _this2 = this;
@@ -524,7 +528,7 @@ var RouterStore = (_dec = observable.struct, _dec2 = observable.struct, (_class$
         return;
       }
 
-      var rootViewChanged = !_this.currentView || _this.currentView.getRootPath() !== view.getRootPath();
+      var rootViewChanged = !_this.currentView || _this.currentView.rootPath !== view.rootPath;
       var currentParams = toJS(_this.params);
       var currentQueryParams = toJS(_this.queryParams);
 
@@ -590,17 +594,17 @@ var MobxRouter = observer(_class$2 = function (_Component) {
 
         if (!route || !route.match || acc.length >= 1) return acc;
 
-        var Component$$1 = list[key].component;
+        var Component$$1 = route.component;
 
-        if (list[key].childRoutes) {
+        if (route.childRoutes) {
           return [].concat(toConsumableArray(acc), [React.createElement(
             Component$$1,
             { key: key },
-            _this2.getCurrentViewTree(list[key].childRoutes)
+            _this2.getCurrentViewTree(route.childRoutes)
           )]);
         }
 
-        return typeof list[key].component === 'function' ? [].concat(toConsumableArray(acc), [React.createElement(Component$$1, { key: key })]) : [].concat(toConsumableArray(acc), [Component$$1]);
+        return typeof route.component === 'function' ? [].concat(toConsumableArray(acc), [React.createElement(Component$$1, { key: key })]) : [].concat(toConsumableArray(acc), [Component$$1]);
       }, []);
     }
   }, {
