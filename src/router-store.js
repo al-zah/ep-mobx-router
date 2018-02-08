@@ -13,7 +13,7 @@ class RouterStore {
       return;
     }
 
-    const rootViewChanged = !this.currentView || (this.currentView.getRootPath() !== view.getRootPath());
+    const rootViewChanged = !this.currentView || (this.currentView.rootPath !== view.rootPath);
     const currentParams = toJS(this.params);
     const currentQueryParams = toJS(this.queryParams);
 

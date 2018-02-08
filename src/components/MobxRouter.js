@@ -10,13 +10,13 @@ class MobxRouter extends Component {
 
       if (!route || !route.match || acc.length >= 1) return acc;
 
-      const Component = list[key].component;
+      const Component = route.component;
 
-      if (list[key].childRoutes) {
-        return [...acc, <Component key={key}>{this.getCurrentViewTree(list[key].childRoutes)}</Component>];
+      if (route.childRoutes) {
+        return [...acc, <Component key={key}>{this.getCurrentViewTree(route.childRoutes)}</Component>];
       }
 
-      return typeof list[key].component === 'function' ? [...acc, <Component key={key} />] : [...acc, Component];
+      return typeof route.component === 'function' ? [...acc, <Component key={key} />] : [...acc, Component];
     }, []);
   }
 

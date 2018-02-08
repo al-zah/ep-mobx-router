@@ -1,4 +1,4 @@
-import {toJS, observable, action} from 'mobx';
+import {toJS, observable, action, computed} from 'mobx';
 import {getObjectKeys} from './utils';
 import {paramRegex, optionalRegex} from './regex';
 import {getRegexMatches} from './utils';
@@ -9,7 +9,6 @@ class Route {
   //props
   component;
   path;
-  rootPath;
   @observable match = false;
 
   //lifecycle methods
@@ -24,10 +23,8 @@ class Route {
 
     //if there are optional parameters, replace the path with a regex expression
     this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/\!]*)");
-    this.rootPath = this.getRootPath();
 
     //bind
-    this.getRootPath = this.getRootPath.bind(this);
     this.replaceUrlParams = this.replaceUrlParams.bind(this);
     this.getParamsObject = this.getParamsObject.bind(this);
     this.goTo = this.goTo.bind(this);
@@ -35,10 +32,14 @@ class Route {
 
   /*
    Sets the root path for the current path, so it's easier to determine if the route entered/exited or just some params changed
-   Example: for '/' the root path is '/', for '/profile/:username/:tab' the root path is '/profile'
+   Example: for '/' the root path is '/', for '/profile/:username/:tab' the root path is '/profile/'
    */
-  getRootPath() {
-    return `/${this.path.split('/')[1]}`
+  @computed get rootPath() {
+    if (this.ownPath.indexOf(':') !== -1) {
+      return this.ownPath.split(':')[0];
+    }
+
+    return this.ownPath;
   };
 
   /*
@@ -74,7 +75,7 @@ class Route {
 
     return paramsArray.reduce((obj, paramValue, index) => {
       if (!params[index]) return obj;
-      obj[params[index].replace(/(\/:|\?)/g, '')] = paramValue;
+      obj[params[index].replace(/(\/:|\&)/g, '')] = paramValue;
 
       return obj;
     }, {});

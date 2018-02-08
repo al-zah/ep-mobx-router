@@ -6,7 +6,7 @@ type LifecyclePropsType = (context: IRoute, params: IRouteParams, store: any) =>
 
 interface IRoute {
     path: string;
-    component: React.ComponentClass | React.StatelessComponent | React.ReactElement<any> | null;
+    component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
     onEnter?: LifecyclePropsType;
     onParamsChange?: LifecyclePropsType;
     childRoutes?: { [key: string]: any };
