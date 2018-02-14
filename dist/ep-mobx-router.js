@@ -226,7 +226,7 @@ var viewsForDirector = function viewsForDirector(views, store, parentView) {
     var view = views[viewKey];
 
     if (!view.childRoutes) {
-      obj[view.path] = {
+      obj[view.path.replace(/\$/g, '?')] = {
         on: function on() {
           for (var _len = arguments.length, paramsArr = Array(_len), _key = 0; _key < _len; _key++) {
             paramsArr[_key] = arguments[_key];
@@ -240,7 +240,7 @@ var viewsForDirector = function viewsForDirector(views, store, parentView) {
         }
       };
     } else {
-      obj[view.path] = _extends({}, viewsForDirector(view.childRoutes, store, view), {
+      obj[view.path.replace(/\$/g, '?')] = _extends({}, viewsForDirector(view.childRoutes, store, view), {
         on: function on() {
           for (var _len2 = arguments.length, paramsArr = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
             paramsArr[_key2] = arguments[_key2];
@@ -273,7 +273,7 @@ var getRegexMatches = function getRegexMatches(string, regexExpression, callback
   }
 };
 
-var paramRegex = /\/(:([^\/?]*)\$?)/g;
+var paramRegex = /\/(:([^\/$]*)\$?|\/)/g;
 var optionalRegex = /(\/:[^\/]*\$)/g;
 
 var _class;
@@ -341,7 +341,7 @@ var Route = (_class = function () {
 
       return paramsArray.reduce(function (obj, paramValue, index) {
         if (!params[index]) return obj;
-        obj[params[index].replace(/(\/:|\&)/g, '')] = paramValue;
+        obj[params[index].replace(/(\/:|\$)/g, '')] = paramValue;
 
         return obj;
       }, {});
@@ -355,7 +355,7 @@ var Route = (_class = function () {
     this.originalPath = this.path;
 
     //if there are optional parameters, replace the path with a regex expression
-    this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/\!]*)");
+    this.path = this.path.indexOf('$') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/\!]*)");
 
     //bind
     this.replaceUrlParams = this.replaceUrlParams.bind(this);

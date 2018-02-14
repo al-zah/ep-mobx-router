@@ -22,7 +22,7 @@ class Route {
     this.originalPath = this.path;
 
     //if there are optional parameters, replace the path with a regex expression
-    this.path = this.path.indexOf('?') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/\!]*)");
+    this.path = this.path.indexOf('$') === -1 ? this.path : this.path.replace(optionalRegex, "/?([^/\!]*)");
 
     //bind
     this.replaceUrlParams = this.replaceUrlParams.bind(this);
@@ -75,7 +75,7 @@ class Route {
 
     return paramsArray.reduce((obj, paramValue, index) => {
       if (!params[index]) return obj;
-      obj[params[index].replace(/(\/:|\&)/g, '')] = paramValue;
+      obj[params[index].replace(/(\/:|\$)/g, '')] = paramValue;
 
       return obj;
     }, {});

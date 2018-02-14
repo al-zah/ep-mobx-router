@@ -5,7 +5,7 @@ export const viewsForDirector = (views, store, parentView) => getObjectKeys(view
   const view = views[viewKey];
 
   if (!view.childRoutes) {
-    obj[view.path] = {
+    obj[view.path.replace(/\$/g, '?')] = {
       on: (...paramsArr) => {
         view.setMatch(true);
         view.goTo(store, paramsArr);
@@ -13,7 +13,7 @@ export const viewsForDirector = (views, store, parentView) => getObjectKeys(view
       after: () => view.setMatch(false),
     };
   } else {
-    obj[view.path] = {
+    obj[view.path.replace(/\$/g, '?')] = {
       ...viewsForDirector(view.childRoutes, store, view),
       on: (...paramsArr) => {
         view.setMatch(true);
