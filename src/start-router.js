@@ -1,4 +1,4 @@
-import tarantino from 'ep-tarantino';
+import tarantino from 'hhs-tarantino';
 import { autorun } from 'mobx';
 import { viewsForDirector } from './utils';
 

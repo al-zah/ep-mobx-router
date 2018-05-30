@@ -1,6 +1,6 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('mobx'), require('query-string'), require('ep-tarantino'), require('react'), require('mobx-react')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'mobx', 'query-string', 'ep-tarantino', 'react', 'mobx-react'], factory) :
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('mobx'), require('query-string'), require('hhs-tarantino'), require('react'), require('mobx-react')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'mobx', 'query-string', 'hhs-tarantino', 'react', 'mobx-react'], factory) :
   (factory((global.mobxRouter = global.mobxRouter || {}),global.mobx,global.queryString,global.tarantino,global.React,global.mobxReact));
 }(this, (function (exports,mobx,queryString,tarantino,React,mobxReact) { 'use strict';
 
