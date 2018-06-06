@@ -6,7 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var mobx = require('mobx');
 var queryString = _interopDefault(require('query-string'));
-var tarantino = _interopDefault(require('hhs-tarantino'));
+var tarantino = _interopDefault(require('ep-tarantino'));
 var React = require('react');
 var React__default = _interopDefault(React);
 var mobxReact = require('mobx-react');
@@ -418,6 +418,7 @@ var Route = (_class = function () {
   }, {
     key: 'rootPath',
     get: function get() {
+      if (!this.ownPath) return this.originalPath;
       if (this.ownPath.indexOf(':') !== -1) {
         return this.ownPath.split(':')[0];
       }

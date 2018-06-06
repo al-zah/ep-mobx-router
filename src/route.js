@@ -35,6 +35,7 @@ class Route {
    Example: for '/' the root path is '/', for '/profile/:username/:tab' the root path is '/profile/'
    */
   @computed get rootPath() {
+    if (!this.ownPath) return this.originalPath;
     if (this.ownPath.indexOf(':') !== -1) {
       return this.ownPath.split(':')[0];
     }

@@ -1,6 +1,6 @@
 import { action, autorun, computed, observable, toJS } from 'mobx';
 import queryString from 'query-string';
-import tarantino from 'hhs-tarantino';
+import tarantino from 'ep-tarantino';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
@@ -411,6 +411,7 @@ var Route = (_class = function () {
   }, {
     key: 'rootPath',
     get: function get() {
+      if (!this.ownPath) return this.originalPath;
       if (this.ownPath.indexOf(':') !== -1) {
         return this.ownPath.split(':')[0];
       }
