@@ -1,4 +1,4 @@
-import { action, autorun, computed, observable, toJS } from 'mobx';
+import { action, autorun, computed, observable, runInAction, toJS } from 'mobx';
 import queryString from 'query-string';
 import tarantino from 'ep-tarantino';
 import React, { Component } from 'react';
@@ -576,9 +576,111 @@ var startRouter = function startRouter(views, store) {
 };
 
 var _class$2;
+var _class2;
+var _descriptor$2;
+var _descriptor2$2;
+var _class4;
 
-var MobxRouter = observer(_class$2 = function (_Component) {
-  inherits(MobxRouter, _Component);
+function _initDefineProp$2(target, property, descriptor, context) {
+  if (!descriptor) return;
+  Object.defineProperty(target, property, {
+    enumerable: descriptor.enumerable,
+    configurable: descriptor.configurable,
+    writable: descriptor.writable,
+    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+  });
+}
+
+function _applyDecoratedDescriptor$2(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
+  });
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
+
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
+  }
+
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
+  }
+
+  if (desc.initializer === void 0) {
+    Object['define' + 'Property'](target, property, desc);
+    desc = null;
+  }
+
+  return desc;
+}
+
+var AsyncComponent = observer(_class$2 = (_class2 = function (_Component) {
+  inherits(AsyncComponent, _Component);
+
+  function AsyncComponent() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    classCallCheck(this, AsyncComponent);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = AsyncComponent.__proto__ || Object.getPrototypeOf(AsyncComponent)).call.apply(_ref, [this].concat(args))), _this), _initDefineProp$2(_this, 'isLoaded', _descriptor$2, _this), _initDefineProp$2(_this, 'component', _descriptor2$2, _this), _temp), possibleConstructorReturn(_this, _ret);
+  }
+
+  createClass(AsyncComponent, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.props.async.then(function (component) {
+        return runInAction(function () {
+          _this2.component = component;_this2.isLoaded = true;
+        });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      if (this.isLoaded) {
+        return React.createElement(
+          this.component,
+          null,
+          this.props.children
+        );
+      }
+
+      return React.createElement(
+        'div',
+        null,
+        this.props.children
+      );
+    }
+  }]);
+  return AsyncComponent;
+}(Component), (_descriptor$2 = _applyDecoratedDescriptor$2(_class2.prototype, 'isLoaded', [observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return false;
+  }
+}), _descriptor2$2 = _applyDecoratedDescriptor$2(_class2.prototype, 'component', [observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return null;
+  }
+})), _class2)) || _class$2;
+
+var MobxRouter = observer(_class4 = function (_Component2) {
+  inherits(MobxRouter, _Component2);
 
   function MobxRouter() {
     classCallCheck(this, MobxRouter);
@@ -588,12 +690,25 @@ var MobxRouter = observer(_class$2 = function (_Component) {
   createClass(MobxRouter, [{
     key: 'getCurrentViewTree',
     value: function getCurrentViewTree(list) {
-      var _this2 = this;
+      var _this4 = this;
 
       return Object.keys(list).reduce(function (acc, key) {
         var route = list[key];
 
         if (!route || !route.match || acc.length >= 1) return acc;
+
+        if (route.async && route.match) {
+          route.async.then();
+          if (route.childRoutes) {
+            return [].concat(toConsumableArray(acc), [React.createElement(
+              AsyncComponent,
+              { key: key, async: route.async },
+              _this4.getCurrentViewTree(route.childRoutes)
+            )]);
+          }
+
+          return [].concat(toConsumableArray(acc), [React.createElement(AsyncComponent, { key: key, async: route.async })]);
+        }
 
         var Component$$1 = route.component;
 
@@ -601,7 +716,7 @@ var MobxRouter = observer(_class$2 = function (_Component) {
           return [].concat(toConsumableArray(acc), [React.createElement(
             Component$$1,
             { key: key },
-            _this2.getCurrentViewTree(route.childRoutes)
+            _this4.getCurrentViewTree(route.childRoutes)
           )]);
         }
 
@@ -622,7 +737,7 @@ var MobxRouter = observer(_class$2 = function (_Component) {
     }
   }]);
   return MobxRouter;
-}(Component)) || _class$2;
+}(Component)) || _class4;
 
 var Link = function Link(_ref) {
   var view = _ref.view,
