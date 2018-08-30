@@ -698,7 +698,6 @@ var MobxRouter = observer(_class4 = function (_Component2) {
         if (!route || !route.match || acc.length >= 1) return acc;
 
         if (route.async && route.match) {
-          route.async.then();
           if (route.childRoutes) {
             return [].concat(toConsumableArray(acc), [React.createElement(
               AsyncComponent,

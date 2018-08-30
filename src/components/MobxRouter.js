@@ -30,7 +30,6 @@ class MobxRouter extends Component {
       if (!route || !route.match || acc.length >= 1) return acc;
 
       if (route.async && route.match) {
-        route.async.then()
         if (route.childRoutes) {
           return [...acc, <AsyncComponent key={key} async={route.async}>{this.getCurrentViewTree(route.childRoutes)}</AsyncComponent>];
         }
