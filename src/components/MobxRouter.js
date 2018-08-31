@@ -7,9 +7,18 @@ class AsyncComponent extends Component {
   @observable isLoaded = false;
   @observable component = null;
 
-  componentDidMount() {
-    this.props.async.then((component) => runInAction(() => { this.component = component; this.isLoaded = true; } ))
+  load() {
+    this.props.async.then(component => runInAction(() => { this.component = component; this.isLoaded = true; } ));
   }
+
+  componentDidUpdate() {
+    if (process && process.env && process.env.NODE_ENV !== 'production') this.load(); // temp hack for hmr
+  }
+
+  componentDidMount() {
+    this.load();
+  }
+
   render() {
     if (this.isLoaded) {
       return <this.component>{this.props.children}</this.component>

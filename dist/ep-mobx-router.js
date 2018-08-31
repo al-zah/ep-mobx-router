@@ -645,8 +645,8 @@ var AsyncComponent = mobxReact.observer(_class$2 = (_class2 = function (_Compone
   }
 
   createClass(AsyncComponent, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
+    key: 'load',
+    value: function load() {
       var _this2 = this;
 
       this.props.async.then(function (component) {
@@ -654,6 +654,16 @@ var AsyncComponent = mobxReact.observer(_class$2 = (_class2 = function (_Compone
           _this2.component = component;_this2.isLoaded = true;
         });
       });
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      if (process && process.env && process.env.NODE_ENV !== 'production') this.load(); // temp hack for hmr
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.load();
     }
   }, {
     key: 'render',
